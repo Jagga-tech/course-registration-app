@@ -1,0 +1,24 @@
+{
+  "name": "course-registration-app",
+  "version": "1.0.0",
+  "description": "University Course Registration System: a MySQL-backed web application",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "npm install && npm --prefix client install && npm --prefix client run build",
+    "build": "npm --prefix client run build",
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "dev:client": "npm --prefix client run dev",
+    "db:init": "node scripts/init-db.js",
+    "test": "node --test tests/api.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "mysql2": "^3.11.5"
+  }
+}
