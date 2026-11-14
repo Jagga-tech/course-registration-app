@@ -56,7 +56,19 @@ mysql -u root -p < db/seed.sql
 npm start
 ```
 
-Open **http://localhost:3000** in your browser.
+Open **http://localhost:3000** in your browser, or use the GitHub Pages link below.
+
+### Using the GitHub Pages version
+
+The interface is also published at **https://jagga-tech.github.io/course-registration-app/**. GitHub Pages can only host static files, so that page has no database of its own. It sends every request to the server running on your computer at `http://localhost:3000`, and the data stays in your local MySQL.
+
+1. Finish steps 1–4 above, then run `npm start`.
+2. Open the Pages link in Chrome or Edge. If the browser asks to let the site access devices on your local network, click **Allow**.
+3. If the server isn't running, the page shows a yellow "Connect to your local server" box. Start the server and click **Save and retry**. You can also change the address there if you use a different port.
+
+The server only accepts browser requests from the origins listed in `CORS_ORIGINS` in `.env`. The default is `https://jagga-tech.github.io`. Safari may block a secure (https) page from calling `http://localhost`, so use Chrome or Edge for the Pages version, or just open http://localhost:3000.
+
+**One-time setup on GitHub:** go to the repo's **Settings → Pages** and set **Source** to **GitHub Actions**. After that, every push to `main` rebuilds and republishes the site (`.github/workflows/pages.yml`).
 
 ### Opening it on a phone
 

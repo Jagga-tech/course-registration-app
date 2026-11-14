@@ -14,6 +14,27 @@ import lookups from './routes/lookups.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
+const allowedOrigins = (process.env.CORS_ORIGINS || 'https://jagga-tech.github.io')
+  .split(',')
+  .map((o) => o.trim().replace(/\/+$/, ''))
+  .filter(Boolean);
+
+app.use('/api', (req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.set('Access-Control-Allow-Origin', origin);
+    res.set('Vary', 'Origin');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.set('Access-Control-Max-Age', '600');
+    if (req.headers['access-control-request-private-network'] === 'true') {
+      res.set('Access-Control-Allow-Private-Network', 'true');
+    }
+  }
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
+
 app.use(express.json({ limit: '100kb' }));
 
 const wrap = (router) => {

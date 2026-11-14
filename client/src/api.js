@@ -1,13 +1,40 @@
+export const IS_STATIC_HOST = Boolean(import.meta.env.VITE_API_BASE);
+
+export function getApiBase() {
+  try {
+    const saved = localStorage.getItem('apiBase');
+    if (saved) return saved;
+  } catch {
+    return import.meta.env.VITE_API_BASE || '';
+  }
+  return import.meta.env.VITE_API_BASE || '';
+}
+
+export function setApiBase(value) {
+  try {
+    if (value) localStorage.setItem('apiBase', value.replace(/\/+$/, ''));
+    else localStorage.removeItem('apiBase');
+  } catch {
+    return;
+  }
+}
+
 export async function api(path, { method = 'GET', body } = {}) {
   let res;
   try {
-    res = await fetch(`/api${path}`, {
+    res = await fetch(`${getApiBase()}/api${path}`, {
       method,
       headers: body ? { 'Content-Type': 'application/json' } : undefined,
       body: body ? JSON.stringify(body) : undefined
     });
   } catch {
-    return { ok: false, error: 'Cannot reach the server. Is it running?' };
+    return {
+      ok: false,
+      offline: true,
+      error: IS_STATIC_HOST
+        ? `Cannot reach the server at ${getApiBase()}. Start it on your computer with "npm start" and reload this page.`
+        : 'Cannot reach the server. Is it running?'
+    };
   }
   let data = null;
   try {

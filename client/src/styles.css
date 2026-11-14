@@ -137,3 +137,10 @@ tbody tr:hover { background: #fafbfd; }
   .inline-edit form { justify-content: flex-end; }
   .bar-cell { justify-content: flex-end; min-width: 0; }
 }
+
+.server-help { border-color: #f1d28c; background: var(--warn-bg); }
+.server-help p { margin: 0 0 10px; }
+.server-help code { background: #fff; padding: 1px 6px; border-radius: 4px; }
+.server-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.server-row label { font-weight: 600; }
+.server-row input { flex: 1; min-width: 200px; }

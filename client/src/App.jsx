@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { LookupProvider, useLookups, Message } from './components/ui.jsx';
+import { IS_STATIC_HOST, getApiBase, setApiBase } from './api.js';
 import Home from './pages/Home.jsx';
 import Students from './pages/Students.jsx';
 import StudentForm from './pages/StudentForm.jsx';
@@ -18,9 +19,31 @@ const links = [
   ['/reports', 'Reports']
 ];
 
+function ServerHelp() {
+  const [url, setUrl] = useState(getApiBase());
+  const save = (e) => {
+    e.preventDefault();
+    setApiBase(url.trim());
+    window.location.reload();
+  };
+  return (
+    <form className="card server-help" onSubmit={save}>
+      <h2>Connect to your local server</h2>
+      <p>This page is hosted on GitHub Pages, but the data lives in MySQL on your computer. In the project folder run <code>npm start</code>, then reload this page. If your browser asks to let this site access devices on your local network, choose Allow.</p>
+      <div className="server-row">
+        <label htmlFor="apibase">Server address</label>
+        <input id="apibase" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="http://localhost:3000" />
+        <button className="btn primary" type="submit">Save and retry</button>
+      </div>
+    </form>
+  );
+}
+
 function LookupError() {
-  const { error } = useLookups();
-  return error ? <Message msg={{ type: 'error', text: `Could not load lists from the database: ${error}` }} /> : null;
+  const { error, offline } = useLookups();
+  if (!error) return null;
+  if (IS_STATIC_HOST && offline) return <ServerHelp />;
+  return <Message msg={{ type: 'error', text: `Could not load lists from the database: ${error}` }} />;
 }
 
 export default function App() {
@@ -33,7 +56,7 @@ export default function App() {
       <header className="topbar">
         <div className="topbar-inner">
           <NavLink to="/" className="brand">
-            <img src="/favicon.svg" alt="" width="28" height="28" />
+            <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" width="28" height="28" />
             <span>Course Registration</span>
           </NavLink>
           <button className="menu-btn" aria-expanded={open} aria-controls="main-nav" onClick={() => setOpen(!open)}>

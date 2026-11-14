@@ -35,10 +35,15 @@ const LookupContext = createContext(null);
 export function LookupProvider({ children }) {
   const [lookups, setLookups] = useState(null);
   const [error, setError] = useState(null);
+  const [offline, setOffline] = useState(false);
   useEffect(() => {
-    api('/lookups').then((r) => (r.ok ? setLookups(r.data) : setError(r.error)));
+    api('/lookups').then((r) => {
+      if (r.ok) return setLookups(r.data);
+      setError(r.error);
+      setOffline(Boolean(r.offline));
+    });
   }, []);
-  return <LookupContext.Provider value={{ lookups, error }}>{children}</LookupContext.Provider>;
+  return <LookupContext.Provider value={{ lookups, error, offline }}>{children}</LookupContext.Provider>;
 }
 
 export const useLookups = () => useContext(LookupContext);
