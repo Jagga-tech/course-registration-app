@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import 'dotenv/config';
 import { pool } from './db.js';
+import { initDatabase } from '../scripts/init-db.js';
 import { toHttpError } from './errors.js';
 import students from './routes/students.js';
 import sections from './routes/sections.js';
@@ -79,6 +80,15 @@ if (fs.existsSync(dist)) {
 }
 
 const port = Number(process.env.PORT || 3000);
+
+if (process.env.AUTO_INIT === 'true') {
+  try {
+    await initDatabase({ onlyIfEmpty: true });
+  } catch (err) {
+    console.error(`Could not set up the database: ${err.message}`);
+  }
+}
+
 app.listen(port, () => {
   console.log(`Course Registration app running at http://localhost:${port}`);
 });

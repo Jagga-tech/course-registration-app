@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: course-registration-app
+    runtime: node
+    plan: free
+    buildCommand: npm run setup
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: AUTO_INIT
+        value: "true"
+      - key: DB_NAME
+        value: course_registration
+      - key: DB_SSL
+        value: "true"
+      - key: CORS_ORIGINS
+        value: https://jagga-tech.github.io
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_CA
+        sync: false
