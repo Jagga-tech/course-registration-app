@@ -68,7 +68,7 @@ The interface is also published at **https://jagga-tech.github.io/course-registr
 
 The server only accepts browser requests from the origins listed in `CORS_ORIGINS` in `.env`. The default is `https://jagga-tech.github.io`. Safari may block a secure (https) page from calling `http://localhost`, so use Chrome or Edge for the Pages version, or just open http://localhost:3000.
 
-**One-time setup on GitHub:** go to the repo's **Settings → Pages** and set **Source** to **GitHub Actions**. After that, every push to `main` rebuilds and republishes the site (`.github/workflows/pages.yml`).
+Every push to `main` rebuilds the interface and publishes it to the `gh-pages` branch, which GitHub Pages serves (`.github/workflows/pages.yml`).
 
 ### Opening it on a phone
 
